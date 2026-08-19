@@ -269,3 +269,21 @@ describe("isUnderSubagentsDir", () => {
     expect(isUnderSubagentsDir(named)).toBe(false);
   });
 });
+
+describe("CLI version", () => {
+  it("reports the version from package.json", async () => {
+    const { execFileSync } = await import("node:child_process");
+    const fs = await import("node:fs");
+    const url = await import("node:url");
+    const path = await import("node:path");
+
+    const root = path.dirname(url.fileURLToPath(import.meta.url)).replace(/\/tests$/, "");
+    const declared = JSON.parse(fs.readFileSync(path.join(root, "package.json"), "utf-8")).version;
+    const reported = execFileSync("node", [path.join(root, "dist/cli.js"), "--version"], {
+      encoding: "utf-8",
+    }).trim();
+
+    // A hardcoded string here drifts silently and makes --version lie.
+    expect(reported).toBe(declared);
+  });
+});
