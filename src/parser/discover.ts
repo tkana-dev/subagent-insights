@@ -11,6 +11,11 @@ export interface DiscoverOptions {
   limit?: number;
 }
 
+/** True when the path passes through a `subagents` directory, on any platform. */
+export function isUnderSubagentsDir(filePath: string): boolean {
+  return filePath.split(path.sep).slice(0, -1).includes("subagents");
+}
+
 export class TranscriptDiscoverer {
   private normalizer = new ClaudeTranscriptNormalizer();
 
@@ -126,7 +131,9 @@ export class TranscriptDiscoverer {
           // If in automatic discovery, only pick subagent files: agent-*.jsonl or inside a /subagents/ folder
           if (isExplicitDir) {
             fileList.push(fullPath);
-          } else if (entry.name.startsWith("agent-") || fullPath.includes("/subagents/")) {
+            // path.join uses "\\" on Windows, so a hardcoded "/subagents/"
+            // silently never matches there.
+          } else if (entry.name.startsWith("agent-") || isUnderSubagentsDir(fullPath)) {
             fileList.push(fullPath);
           }
         }
