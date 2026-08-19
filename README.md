@@ -2,6 +2,9 @@
 
 **Understand how your AI subagents actually work.**
 
+[![CI](https://github.com/tkana-dev/subagent-insights/actions/workflows/ci.yml/badge.svg)](https://github.com/tkana-dev/subagent-insights/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Review your Claude Code subagents from the transcripts they already leave behind: how they actually work, where they fall down, and one concrete rule to put in `CLAUDE.md`. Deterministic, no LLM involved.
 
 <p align="center">

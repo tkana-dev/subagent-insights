@@ -2,6 +2,9 @@
 
 **AI サブエージェントの「実際の働き方」を可視化する。**
 
+[![CI](https://github.com/tkana-dev/subagent-insights/actions/workflows/ci.yml/badge.svg)](https://github.com/tkana-dev/subagent-insights/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 Claude Code のサブエージェント（ビルトイン・自作を問わず）が残した実行ログを解析し、行動パターン・強み・弱み・失敗傾向を診断。さらに `CLAUDE.md` や `.claude/agents/*.md` に追加できる改善ルールを 1 件提案します。LLM を使わない確定的な解析です。
 
 <p align="center">
