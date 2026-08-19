@@ -20,7 +20,7 @@ const DIMENSION_ORDER: DimensionKey[] = [
  * width it actually occupies and the pasted table comes out ragged. Full-width
  * and wide ranges (CJK, kana, full-width forms) count as two columns.
  */
-function displayWidth(text: string): number {
+export function displayWidth(text: string): number {
   let width = 0;
   for (const char of text) {
     const cp = char.codePointAt(0) ?? 0;

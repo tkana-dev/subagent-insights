@@ -75,6 +75,21 @@ npx subagent-insights --markdown --lang ja > agent-review.md
 
 ---
 
+## 🖼 シェアカード
+
+```bash
+npx subagent-insights card          # SVG（追加依存なし・どこでも動く）
+npx subagent-insights card --png    # PNG（画像として投稿する用）
+```
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/tkana-dev/subagent-insights/main/assets/card-example.png" alt="シェアカードの例" width="620">
+</p>
+
+PNG は optional 依存の `@resvg/resvg-js` を使います。お使いの環境に入っていない場合は SVG を書き出して理由を表示します。CLI 本体がこの依存で壊れることはありません。
+
+---
+
 ## 📢 レポートの共有
 
 ```bash

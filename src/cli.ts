@@ -5,6 +5,7 @@ import { Command } from "commander";
 import { HeuristicEvaluator } from "./eval/heuristics.js";
 import { TranscriptDiscoverer } from "./parser/discover.js";
 import { MarkdownRenderer } from "./renderer/markdown.js";
+import { buildCardSvg } from "./renderer/card.js";
 import { buildDiscordMessage } from "./renderer/share.js";
 import { TerminalRenderer } from "./renderer/terminal.js";
 import type { CanonicalEvent, SubagentSession } from "./types/index.js";
@@ -27,6 +28,28 @@ program
   .option("--limit <n>", "Max transcript files to analyze (default: all in period)")
   .action(async (options) => {
     await runReview(options);
+  });
+
+program
+  .command("card")
+  .description("Write a shareable summary card (SVG, or PNG with --png)")
+  .option("-p, --period <days>", "Evaluation period in days", "14")
+  .option("-a, --agent <name>", "Filter by agent ID or name")
+  .option("-l, --lang <lang>", "Language (en | ja)", "en")
+  .option("-d, --demo", "Use demo sample")
+  .option("--limit <n>", "Max transcript files to analyze (default: all in period)")
+  .option("-o, --out <path>", "Output file (default: subagent-card-<agent>.<ext>)")
+  .option("--png", "Rasterise to PNG (needs the optional @resvg/resvg-js renderer)")
+  .action(async (_options, command) => {
+    await runCard({
+      demo: resolveOption<boolean>(command, "demo"),
+      period: resolveOption<string>(command, "period"),
+      agent: resolveOption<string>(command, "agent"),
+      lang: resolveOption<string>(command, "lang"),
+      limit: resolveOption<string>(command, "limit"),
+      out: resolveOption<string>(command, "out"),
+      png: resolveOption<boolean>(command, "png"),
+    });
   });
 
 program
@@ -232,6 +255,66 @@ async function runImprove(options: {
         console.log("```\n");
       }
     }
+  }
+}
+
+async function runCard(options: {
+  demo?: boolean;
+  period?: string;
+  agent?: string;
+  lang?: string;
+  limit?: string;
+  out?: string;
+  png?: boolean;
+}) {
+  const lang = options.lang === "ja" ? "ja" : "en";
+  const results = await collectResults(options);
+
+  if (results.length === 0) {
+    console.log("\n⚠️  No subagent transcripts found. Try `subagent-insights card --demo`.\n");
+    return;
+  }
+
+  for (const result of results) {
+    const svg = buildCardSvg(result, lang);
+    const stem = options.out?.replace(/\.(svg|png)$/i, "") ?? `subagent-card-${slug(result.agent.id)}`;
+
+    if (!options.png) {
+      writeCard(`${stem}.svg`, svg);
+      continue;
+    }
+
+    const png = await rasterise(svg);
+    if (png) {
+      writeCard(`${stem}.png`, png);
+    } else {
+      // The renderer ships prebuilt binaries per platform and is optional, so
+      // its absence must never be a dead end.
+      writeCard(`${stem}.svg`, svg);
+      console.log(
+        "   PNG needs the optional renderer: npm i -D @resvg/resvg-js\n" +
+          "   Wrote SVG instead — it works in GitHub issues and READMEs as-is."
+      );
+    }
+  }
+}
+
+function slug(text: string): string {
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "agent";
+}
+
+function writeCard(file: string, data: string | Uint8Array): void {
+  fs.writeFileSync(file, data);
+  console.log(`\n🖼  ${path.resolve(file)}`);
+}
+
+/** Returns null when the optional renderer is not installed. */
+async function rasterise(svg: string): Promise<Uint8Array | null> {
+  try {
+    const { Resvg } = await import("@resvg/resvg-js");
+    return new Resvg(svg).render().asPng();
+  } catch {
+    return null;
   }
 }
 
