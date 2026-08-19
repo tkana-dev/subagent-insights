@@ -1,6 +1,6 @@
 {
   "name": "subagent-insights",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Review your Claude Code subagents from their local transcripts: work patterns, strengths, weaknesses, failure modes, and a suggested CLAUDE.md rule.",
   "repository": {
     "type": "git",

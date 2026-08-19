@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import url from "node:url";
 import { Command } from "commander";
 import { HeuristicEvaluator } from "./eval/heuristics.js";
 import { TranscriptDiscoverer } from "./parser/discover.js";
@@ -10,12 +11,23 @@ import { buildDiscordMessage } from "./renderer/share.js";
 import { TerminalRenderer } from "./renderer/terminal.js";
 import type { CanonicalEvent, SubagentSession } from "./types/index.js";
 
+/** Read from package.json so `--version` cannot drift from what was published. */
+function readPackageVersion(): string {
+  try {
+    const here = path.dirname(url.fileURLToPath(import.meta.url));
+    const manifest = fs.readFileSync(path.join(here, "..", "package.json"), "utf-8");
+    return (JSON.parse(manifest).version as string) ?? "0.0.0";
+  } catch {
+    return "0.0.0";
+  }
+}
+
 const program = new Command();
 
 program
   .name("subagent-insights")
   .description("Review your Claude Code subagents from their local transcripts: work patterns, strengths, weaknesses, failure modes, and a suggested CLAUDE.md rule.")
-  .version("0.1.0")
+  .version(readPackageVersion())
   .option("-d, --demo", "Run with sample demo subagent transcript")
   .option("-p, --period <days>", "Evaluation period in days (e.g. 7 or 7d)", "14")
   .option("-a, --agent <name>", "Filter by agent ID or name")
