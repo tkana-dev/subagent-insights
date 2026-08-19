@@ -2,6 +2,7 @@
 
 **Understand how your AI subagents actually work.**
 
+[![npm](https://img.shields.io/npm/v/subagent-insights.svg)](https://www.npmjs.com/package/subagent-insights)
 [![CI](https://github.com/tkana-dev/subagent-insights/actions/workflows/ci.yml/badge.svg)](https://github.com/tkana-dev/subagent-insights/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
