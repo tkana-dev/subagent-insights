@@ -254,3 +254,18 @@ describe("countRedundantCalls", () => {
     expect(n).toBe(0);
   });
 });
+
+describe("isUnderSubagentsDir", () => {
+  it("matches a subagents directory using the platform separator", async () => {
+    const { isUnderSubagentsDir } = await import("../src/parser/discover.js");
+    const path = await import("node:path");
+    const inside = ["a", "b", "subagents", "agent-x.jsonl"].join(path.sep);
+    const outside = ["a", "b", "agent-x.jsonl"].join(path.sep);
+    // A file literally named "subagents" is not a directory match.
+    const named = ["a", "b", "subagents"].join(path.sep);
+
+    expect(isUnderSubagentsDir(inside)).toBe(true);
+    expect(isUnderSubagentsDir(outside)).toBe(false);
+    expect(isUnderSubagentsDir(named)).toBe(false);
+  });
+});
