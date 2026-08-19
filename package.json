@@ -1,0 +1,57 @@
+{
+  "name": "subagent-insights",
+  "version": "0.1.0",
+  "description": "Review your Claude Code subagents from their local transcripts: work patterns, strengths, weaknesses, failure modes, and a suggested CLAUDE.md rule.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tkana-dev/subagent-insights.git"
+  },
+  "homepage": "https://github.com/tkana-dev/subagent-insights#readme",
+  "bugs": {
+    "url": "https://github.com/tkana-dev/subagent-insights/issues"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "subagent-insights": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build && npm run test",
+    "prepare": "tsc"
+  },
+  "keywords": [
+    "claude-code",
+    "subagents",
+    "ai-agents",
+    "agent-evaluation",
+    "performance-review",
+    "work-style",
+    "llm",
+    "anthropic"
+  ],
+  "author": "kana",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "boxen": "^7.1.1",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.3",
+    "vitest": "^2.0.0"
+  }
+}
