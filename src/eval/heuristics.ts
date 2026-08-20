@@ -519,7 +519,7 @@ export class HeuristicEvaluator {
       metric: {
         value: Number(stalledRate.toFixed(4)),
         display: `${sessionsEndingInError} of ${sessions.length} sessions stalled`,
-        displayJa: `${sessions.length} セッション中 ${sessionsEndingInError} 件が失敗のまま終了`,
+        displayJa: `${sessions.length}セッション中${sessionsEndingInError}件が失敗のまま終了`,
       },
     };
   }
@@ -573,8 +573,8 @@ export class HeuristicEvaluator {
             : `0 rejected calls in ${toolCallCount}`,
         displayJa:
           protocolViolationCount > 0
-            ? `${Math.round(1 / violationRate)} 回に 1 回が拒否`
-            : `${toolCallCount} 回中 拒否 0 回`,
+            ? `${Math.round(1 / violationRate)}回に1回が拒否`
+            : `${toolCallCount}回中 拒否0回`,
       },
     };
   }
@@ -641,7 +641,7 @@ export class HeuristicEvaluator {
       metric: {
         value: Number(recoveryRate.toFixed(3)),
         display: `${errorCount} failing calls, ${Math.round(recoveryRate * 100)}% recovered`,
-        displayJa: `失敗 ${errorCount} 件、うち ${Math.round(recoveryRate * 100)}% を自力回復`,
+        displayJa: `失敗${errorCount}件、うち${Math.round(recoveryRate * 100)}%を自力回復`,
       },
     };
   }
@@ -734,8 +734,8 @@ export class HeuristicEvaluator {
             : `${testCount} test runs, no edits`,
         displayJa:
           writeCount > 0
-            ? `編集 1 件あたり ${testsPerEdit.toFixed(2)} 回のテスト実行`
-            : `テスト実行 ${testCount} 回、編集なし`,
+            ? `編集1件あたり${testsPerEdit.toFixed(2)}回のテスト実行`
+            : `テスト実行${testCount}回、編集なし`,
       },
     };
   }
@@ -805,7 +805,7 @@ export class HeuristicEvaluator {
       metric: {
         value: Number(redundantRate.toFixed(4)),
         display: `${redundantCallCount} repeat${redundantCallCount === 1 ? "" : "s"}, ${Math.round(avgStepsPerSession)} steps/session`,
-        displayJa: `重複 ${redundantCallCount} 回、1 セッション ${Math.round(avgStepsPerSession)} ステップ`,
+        displayJa: `重複${redundantCallCount}回、1セッション${Math.round(avgStepsPerSession)}ステップ`,
       },
     };
   }
@@ -864,7 +864,7 @@ export class HeuristicEvaluator {
       metric: {
         value: Number(perSession.toFixed(3)),
         display: `${perSession.toFixed(2)} clarifying questions per session`,
-        displayJa: `1 セッションあたり ${perSession.toFixed(2)} 件の確認・代替案提示`,
+        displayJa: `1セッションあたり${perSession.toFixed(2)}件の確認・代替案`,
       },
     };
   }

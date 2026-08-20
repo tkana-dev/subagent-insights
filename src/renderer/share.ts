@@ -75,7 +75,7 @@ export function buildDiscordMessage(result: AgentReviewResult, lang: "en" | "ja"
 
   const summary =
     lang === "ja"
-      ? `総合 **${result.overallGrade}** (${result.overallScore}/100) ・ ${result.period.totalSessions} セッション ・ 自律回復率 ${Math.round(result.failurePattern.recoveryRate * 100)}%`
+      ? `総合 **${result.overallGrade}** (${result.overallScore}/100) ・ ${result.period.totalSessions}セッション ・ 自律回復率${Math.round(result.failurePattern.recoveryRate * 100)}%`
       : `Grade **${result.overallGrade}** (${result.overallScore}/100) · ${result.period.totalSessions} sessions · ${Math.round(result.failurePattern.recoveryRate * 100)}% autonomous recovery`;
 
   return [headline, summary, "```", ...rows, "```", PROJECT_URL].join("\n");
