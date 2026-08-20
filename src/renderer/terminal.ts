@@ -3,9 +3,27 @@ import chalk from "chalk";
 import Table from "cli-table3";
 import { EN_LOCALE } from "../locales/en.js";
 import { JA_LOCALE } from "../locales/ja.js";
-import { PROJECT_URL } from "./share.js";
+import { PROJECT_URL, displayWidth } from "./share.js";
 import type { AgentReviewResult, DimensionKey, WorkStyleId } from "../types/index.js";
 
+
+/** Width of the widest localized dimension label, plus cell padding. */
+function dimensionColumnWidth(loc: typeof EN_LOCALE): number {
+  const widest = Math.max(
+    ...Object.values(loc.dimensions).map((label) => displayWidth(String(label)))
+  );
+  return widest + 4;
+}
+
+/** Width of the widest observed rate, so the column never truncates. */
+function observedColumnWidth(result: AgentReviewResult): number {
+  const widest = Math.max(
+    ...Object.values(result.dimensions).flatMap((dim) =>
+      dim.metric ? [displayWidth(dim.metric.display), displayWidth(dim.metric.displayJa ?? "")] : [0]
+    )
+  );
+  return Math.max(24, widest + 4);
+}
 
 /** OSC 8 hyperlink: renders `label` as a clickable link to `url`. */
 function osc8(url: string, label: string): string {
@@ -177,7 +195,9 @@ export class TerminalRenderer {
         chalk.bold.cyan(loc.tableHeaders.distribution),
         chalk.bold.cyan(loc.tableHeaders.observed),
       ],
-      colWidths: [30, 8, 16, 42],
+      // Japanese labels are twice as wide per character and were being
+      // truncated by a fixed width ("タスク完遂力 (Task Completi…").
+      colWidths: [dimensionColumnWidth(loc), 8, 16, observedColumnWidth(result)],
       style: { head: [], border: ["dim"] },
     });
 

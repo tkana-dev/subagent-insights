@@ -62,3 +62,26 @@ describe("buildCardSvg", () => {
     expect(dividerY === 0 || dividerY > lastRowY).toBe(true);
   });
 });
+
+describe("terminal table", () => {
+  it("never truncates a dimension label or an observed rate", async () => {
+    const { TerminalRenderer } = await import("../src/renderer/terminal.js");
+
+    // The column widths were fixed numbers, and Japanese labels — twice as
+    // wide per character — were cut off as "タスク完遂力 (Task Completi…".
+    for (const lang of ["en", "ja"] as const) {
+      const out = new TerminalRenderer().render(report("implementer", "done"), {
+        lang,
+        showEvidence: false,
+        showHeader: false,
+        agentIndex: 1,
+        totalAgents: 1,
+      });
+      const table = out.split("\n").filter((l) => l.includes("│"));
+      expect(table.length, `${lang}: no table rendered`).toBeGreaterThan(6);
+      for (const row of table) {
+        expect(row, `${lang}: truncated cell`).not.toContain("…");
+      }
+    }
+  });
+});
